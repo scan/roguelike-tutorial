@@ -5,7 +5,7 @@ use crate::{
     loading::TextureAssets,
 };
 
-use super::TILE_SIZE;
+use super::{TILE_SIZE, TILE_Z};
 
 pub fn spawn_tile_renderer(
     mut commands: Commands,
@@ -21,11 +21,7 @@ pub fn spawn_tile_renderer(
                     color: bevy::color::palettes::css::OLIVE.into(),
                     ..default()
                 },
-                transform: Transform::from_translation(Vec3::new(
-                    position.v.x as f32 * TILE_SIZE,
-                    position.v.y as f32 * TILE_SIZE,
-                    0.0,
-                )),
+                transform: Transform::from_translation(super::get_world_position(position, TILE_Z)),
                 ..default()
             },
             TextureAtlas {

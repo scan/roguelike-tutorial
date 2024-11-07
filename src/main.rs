@@ -1,4 +1,5 @@
 use bevy::asset::AssetMetaCheck;
+use bevy::log::LogPlugin;
 use bevy::prelude::*;
 use bevy::DefaultPlugins;
 
@@ -31,9 +32,22 @@ fn main() {
                     meta_check: AssetMetaCheck::Never,
                     ..default()
                 })
-                .set(ImagePlugin::default_nearest()),
+                .set(ImagePlugin::default_nearest())
+                .set(LogPlugin {
+                    level: bevy::log::Level::WARN,
+                    filter: "bevy_hanabi=warn,3d=trace".to_string(),
+                    ..Default::default()
+                }),
         )
-        .add_plugins(GamePlugin);
+        .add_plugins(GamePlugin)
+        .add_systems(
+            Update,
+            (
+                bevy::window::close_when_requested,
+                bevy::window::exit_on_primary_closed,
+                close_on_esc,
+            ),
+        );
 
     #[cfg(debug_assertions)]
     {
@@ -45,4 +59,20 @@ fn main() {
     }
 
     app.run();
+}
+
+pub fn close_on_esc(
+    mut commands: Commands,
+    focused_windows: Query<(Entity, &Window)>,
+    input: Res<ButtonInput<KeyCode>>,
+) {
+    for (window, focus) in focused_windows.iter() {
+        if !focus.focused {
+            continue;
+        }
+
+        if input.just_pressed(KeyCode::Escape) {
+            commands.entity(window).despawn();
+        }
+    }
 }
