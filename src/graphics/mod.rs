@@ -3,7 +3,7 @@ mod tiles;
 
 use bevy::prelude::*;
 
-use crate::{board::Position, states::GameState};
+use crate::{board::Position, states::MainState};
 
 pub const TILE_SIZE: f32 = 32.;
 pub const TILE_Z: f32 = 0.;
@@ -15,17 +15,20 @@ pub struct GraphicsPlugin;
 
 impl Plugin for GraphicsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
+        app.add_event::<GraphicsWaitEvent>().add_systems(
             Update,
             (
                 tiles::spawn_tile_renderer,
                 pieces::spawn_piece_renderer,
                 pieces::update_piece_position,
             )
-                .run_if(in_state(GameState::Playing)),
+                .run_if(in_state(MainState::Playing)),
         );
     }
 }
+
+#[derive(Debug, Clone, Copy, Event)]
+pub struct GraphicsWaitEvent;
 
 fn get_world_position(position: &Position, z: f32) -> Vec3 {
     Vec3::new(

@@ -1,4 +1,4 @@
-use crate::GameState;
+use crate::MainState;
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 
@@ -7,8 +7,8 @@ pub struct LoadingPlugin;
 impl Plugin for LoadingPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<TextureAssets>().add_loading_state(
-            LoadingState::new(GameState::Loading)
-                .continue_to_state(GameState::Playing)
+            LoadingState::new(MainState::Loading)
+                .continue_to_state(MainState::Playing)
                 .load_collection::<TextureAssets>(),
         );
     }

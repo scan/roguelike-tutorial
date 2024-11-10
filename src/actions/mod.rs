@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use std::collections::VecDeque;
 
+pub mod models;
 mod systems;
 
 pub struct ActionsPlugin;

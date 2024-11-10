@@ -1,6 +1,6 @@
 use bevy::{prelude::*, utils::HashMap};
 
-use crate::{states::GameState, vectors::Vector2Int};
+use crate::{states::MainState, vectors::Vector2Int};
 
 mod components;
 mod systems;
@@ -19,6 +19,6 @@ impl Plugin for BoardPlugin {
         app.init_resource::<CurrentBoard>()
             .register_type::<components::Position>()
             .register_type::<components::Tile>()
-            .add_systems(OnEnter(GameState::Playing), systems::spawn_map);
+            .add_systems(OnEnter(MainState::Playing), systems::spawn_map);
     }
 }
